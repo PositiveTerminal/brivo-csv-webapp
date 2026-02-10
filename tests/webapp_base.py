@@ -7,7 +7,7 @@ from datetime import timedelta as TimeDelta
 import lxml
 import lxml.html
 
-from app.util import EnvKeys, random_string
+from app.util import EnvKeys, MISSING_ENV_VALUE, random_string
 from app.webapp import create_app
 
 
@@ -33,7 +33,7 @@ class WebAppTestBase(unittest.TestCase):
 
     def _reset_config(self):
         for var in EnvKeys.all():
-            self.app.config[var] = "MISSING"
+            self.app.config[var] = MISSING_ENV_VALUE
 
     def _create_config(self):
         self.app.config[EnvKeys.APIKEY] = "test-apikey-123"
@@ -42,7 +42,7 @@ class WebAppTestBase(unittest.TestCase):
         self.app.config[EnvKeys.REDIRECT_URI] = "http://some.random.url/callback"
 
     def tearDown(self):
-        if (path := self.app.config[EnvKeys.WRITABLE_BASE_PATH]) != "MISSING":
+        if (path := self.app.config[EnvKeys.WRITABLE_BASE_PATH]) != MISSING_ENV_VALUE:
             shutil.rmtree(path)
 
     def setUp(self):

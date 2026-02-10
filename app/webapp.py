@@ -14,6 +14,7 @@ from app.blueprints.upload import upload
 from app.util import (
     BrivoApiContext,
     EnvKeys,
+    MISSING_ENV_VALUE,
     PathNames,
     getenv,
     login_required,
@@ -36,7 +37,7 @@ def create_app(*args, **kwargs):
         app.config[var] = getenv(var)
     app.config["SESSION_TYPE"] = "cachelib"
 
-    if app.config[EnvKeys.WRITABLE_BASE_PATH] == "MISSING":
+    if app.config[EnvKeys.WRITABLE_BASE_PATH] == MISSING_ENV_VALUE:
         app.config[EnvKeys.WRITABLE_BASE_PATH] = mkdtemp()
 
     app.config['SESSION_CACHELIB'] = FileSystemCache(

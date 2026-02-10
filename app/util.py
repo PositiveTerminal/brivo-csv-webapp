@@ -7,6 +7,7 @@ from functools import wraps
 
 from flask import current_app, redirect, request, session
 
+MISSING_ENV_VALUE = "MISSING"
 
 class KeysBase:
     @classmethod
@@ -42,7 +43,7 @@ def random_string(length: int = 32) -> str:
     return "".join([random.choice(char_set) for i in range(length)])
 
 
-def getenv(key, default="MISSING"):
+def getenv(key, default=MISSING_ENV_VALUE):
     return os.environ.get(key, default)
 
 
@@ -101,7 +102,7 @@ def is_input_true(input):
 
 
 def valid_config_found():
-    return all([current_app.config[k] != "MISSING" for k in EnvKeys.all()])
+    return all([current_app.config[k] != MISSING_ENV_VALUE for k in EnvKeys.all()])
 
 
 class BrivoApiContext:

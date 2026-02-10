@@ -8,7 +8,7 @@ from flask import session
 from mock import AsyncMock
 
 from app.processing import remove_old_processed_files
-from app.util import EnvKeys, PathNames, valid_config_found
+from app.util import EnvKeys, MISSING_ENV_VALUE, PathNames, valid_config_found
 from app.webapp import writable_path
 from tests.webapp_base import WebAppTestBase, get_flash
 
@@ -117,7 +117,7 @@ class WebAppTestCase(WebAppTestBase):
         with self.app.test_request_context('/'), self.app.test_client() as _:
             for var in EnvKeys.all():
                 self.assertIsNotNone(self.app.config[var])
-                self.assertNotEqual(self.app.config[var], "MISSING")
+                self.assertNotEqual(self.app.config[var], MISSING_ENV_VALUE)
 
 
 if __name__ == '__main__':
