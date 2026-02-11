@@ -15,10 +15,14 @@ class OAuthTestCase(WebAppTestBase):
             "refresh_token": "mock_refresh_token",
             "expires_after": 11,
         }
-        mock_brivo_context.return_value.__aenter__.return_value.exchange_oauth_code_for_token.return_value = token_value
+        mock_brivo_context.return_value.__aenter__.return_value.exchange_oauth_code_for_token.return_value = (
+            token_value
+        )
 
-        with self.app.test_request_context('/oauth_callback?code=mock_code'), self.app.test_client() as c:
-            response = c.get('/oauth_callback?code=mock_code', follow_redirects=True)
+        with self.app.test_request_context(
+            "/oauth_callback?code=mock_code"
+        ), self.app.test_client() as c:
+            response = c.get("/oauth_callback?code=mock_code", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
             self.assertIn("authorized_by_oauth", session["username"])
             self.assertIn("token_object", session)
@@ -31,12 +35,16 @@ class OAuthTestCase(WebAppTestBase):
             "mock_error"
         )
 
-        with self.app.test_request_context('/oauth_callback?code=mock_code'), self.app.test_client() as c:
-            response = c.get('/oauth_callback?code=mock_code', follow_redirects=True)
+        with self.app.test_request_context(
+            "/oauth_callback?code=mock_code"
+        ), self.app.test_client() as c:
+            response = c.get("/oauth_callback?code=mock_code", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn("Error during oauth callback: mock_error", get_flash(response)[0])
+            self.assertIn(
+                "Error during oauth callback: mock_error", get_flash(response)[0]
+            )
             self.assertEqual(response.request.path, "/login")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
